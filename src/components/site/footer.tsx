@@ -30,6 +30,10 @@ export function SiteFooter({ onNavigate }: { onNavigate: (v: ViewKey) => void })
               Free, original study notes and practice questions for Class 9-12 across CBSE, HBSE, BSEB and Kerala
               boards.
             </p>
+            <p className="mt-2 text-[11px] text-stone-400 dark:text-stone-500 leading-relaxed">
+              Serving students in Noida · Greater Noida · Delhi · Gurugram · Faridabad · Sonipat · Patna · Gaya ·
+              Muzaffarpur · Thiruvananthapuram · Kochi · Kozhikode · across India.
+            </p>
             <p className="mt-2 text-[11px] text-stone-400 dark:text-stone-500 flex items-center gap-1.5">
               <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
               100% original content · copyright-safe
@@ -41,19 +45,36 @@ export function SiteFooter({ onNavigate }: { onNavigate: (v: ViewKey) => void })
               Explore
             </h3>
             <ul className="space-y-1.5 text-sm">
-              {(["study", "pyq", "practice", "about"] as ViewKey[]).map((v) => (
-                <li key={v}>
+              {([
+                { v: "study" as ViewKey, label: "Study Material" },
+                { v: "pyq" as ViewKey, label: "Previous Year Papers" },
+                { v: "practice" as ViewKey, label: "Practice Questions" },
+                { v: "about" as ViewKey, label: "About & Policies" },
+              ]).map((item) => (
+                <li key={item.v}>
                   <button
                     className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors"
-                    onClick={() => onNavigate(v)}
+                    onClick={() => onNavigate(item.v)}
                   >
-                    {v === "study" && "Study Material"}
-                    {v === "pyq" && "Previous Year Papers"}
-                    {v === "practice" && "Practice Questions"}
-                    {v === "about" && "About & Policies"}
+                    {item.label}
                   </button>
                 </li>
               ))}
+              <li>
+                <a href="/#classes" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  Class 9-12 Notes
+                </a>
+              </li>
+              <li>
+                <a href="/#schools" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  Schools We Cover
+                </a>
+              </li>
+              <li>
+                <a href="/#faq" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  FAQ
+                </a>
+              </li>
             </ul>
           </div>
 

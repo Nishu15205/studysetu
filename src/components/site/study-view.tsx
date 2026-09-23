@@ -28,10 +28,11 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   initialGrade?: number;
+  initialQuery?: string;
   onNavigate: (v: ViewKey) => void;
 };
 
-export function StudyView({ initialGrade, onNavigate }: Props) {
+export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
   const [grade, setGrade] = useState<number>(initialGrade ?? 10);
   const [data, setData] = useState<SubjectsDto | null>(null);
   const [subjectId, setSubjectId] = useState<string | null>(null);
@@ -47,6 +48,11 @@ export function StudyView({ initialGrade, onNavigate }: Props) {
   useEffect(() => {
     if (initialGrade) setGrade(initialGrade);
   }, [initialGrade]);
+
+  // sitelinks SearchAction (?s=…) — pre-fill search on mount
+  useEffect(() => {
+    if (initialQuery && initialQuery.trim()) setSearch(initialQuery.trim());
+  }, [initialQuery]);
 
   useEffect(() => {
     let alive = true;

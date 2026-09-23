@@ -22,6 +22,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdSlot } from "@/components/site/ad-slot";
+import { SchoolsSection } from "@/components/site/schools-section";
+import { FAQS } from "@/config/seo";
 import type { ClassDto, StatsDto } from "@/lib/types";
 import type { ViewKey } from "@/config/site";
 import { useToast } from "@/hooks/use-toast";
@@ -64,7 +66,7 @@ export function HomeView({
   return (
     <div className="flex flex-col gap-10">
       {/* Hero */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-amber-50 dark:from-emerald-950/40 dark:via-stone-950 dark:to-amber-950/30 border border-emerald-100/70 dark:border-emerald-900/40">
+      <section id="top" className="scroll-mt-24 relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 via-white to-amber-50 dark:from-emerald-950/40 dark:via-stone-950 dark:to-amber-950/30 border border-emerald-100/70 dark:border-emerald-900/40">
         <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 md:py-14 grid md:grid-cols-2 gap-8 items-center">
           <div>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
@@ -136,7 +138,7 @@ export function HomeView({
       </section>
 
       {/* Class picker */}
-      <section aria-label="Choose your class">
+      <section id="classes" aria-label="Choose your class" className="scroll-mt-24">
         <div className="flex items-end justify-between mb-4">
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-stone-900 dark:text-stone-50">Choose Your Class</h2>
@@ -336,7 +338,7 @@ export function HomeView({
       </section>
 
       {/* Why us */}
-      <section aria-label="Features">
+      <section id="features" aria-label="Features" className="scroll-mt-24">
         <h2 className="text-xl md:text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4">Why Students Pick StudySetu</h2>
         <div className="grid sm:grid-cols-3 gap-3 md:gap-4">
           {[
@@ -379,32 +381,14 @@ export function HomeView({
 
       <AdSlot slot="home-bottom" minHeight={110} />
 
+      {/* Schools directory — region-wise SEO content */}
+      <SchoolsSection />
+
       {/* FAQ — helpful for AdSense approval */}
-      <section aria-label="Frequently asked questions">
+      <section id="faq" aria-label="Frequently asked questions" className="scroll-mt-24">
         <h2 className="text-xl md:text-2xl font-bold text-stone-900 dark:text-stone-50 mb-4">Frequently Asked Questions</h2>
         <Accordion type="single" collapsible className="rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 px-4">
-          {[
-            {
-              q: "Is StudySetu free?",
-              a: "Yes. All notes, PYQ guides and practice questions are completely free. The site is supported by non-intrusive ads.",
-            },
-            {
-              q: "Is the content copyright-safe?",
-              a: "Absolutely. Every note and question on StudySetu is originally written — we do not reproduce textbook chapters, guide books or board question papers. For previous year papers, we provide direct links to the official board portals (CBSE, HBSE, BSEB, Kerala DHSE) where the boards themselves publish them for free.",
-            },
-            {
-              q: "How often is new content added?",
-              a: "Automatically, every single day at 03:05 AM IST. New revision notes, fresh MCQ sets and a new Daily Challenge question appear without any manual work.",
-            },
-            {
-              q: "Which boards and classes are covered?",
-              a: "Classes 9 to 12 for CBSE (Delhi/Noida/UP), HBSE Haryana, BSEB Bihar and Kerala board students. The NCERT-based syllabus is shared by CBSE, HBSE and BSEB, and Kerala students can use the same concept notes alongside their SCERT materials.",
-            },
-            {
-              q: "Can I rely on these notes for board exams?",
-              a: "The notes are designed for fast revision and concept clarity. Always cross-check with your prescribed textbook and use official board sample papers (linked in the PYQ section) for the exact exam pattern.",
-            },
-          ].map((f, i) => (
+          {FAQS.map((f, i) => (
             <AccordionItem key={i} value={`faq-${i}`} className="border-stone-100 dark:border-stone-800">
               <AccordionTrigger className="text-sm md:text-base font-medium text-stone-800 dark:text-stone-100 hover:text-emerald-700 dark:hover:text-emerald-400 hover:no-underline">
                 {f.q}

@@ -1,0 +1,726 @@
+     1→/**
+     2→ * Seed script — copyright-safe starter data.
+     3→ * - Boards, classes, subjects, real NCERT chapter NAMES (names/facts are not copyrightable)
+     4→ * - ORIGINAL AI-free seed notes written from scratch (no textbook text)
+     5→ * - Paper metadata linking to OFFICIAL board websites only (no paper files stored)
+     6→ * - ORIGINAL practice questions
+     7→ * Run: bun prisma/seed.ts
+     8→ */
+     9→import { PrismaClient } from "@prisma/client";
+    10→
+    11→const db = new PrismaClient();
+    12→
+    13→// ---------- data ----------
+    14→const BOARDS = [
+    15→  { code: "CBSE", name: "CBSE", fullName: "Central Board of Secondary Education", region: "Delhi · Noida · UP", website: "https://cbse.gov.in/cbsenew/question-paper.html" },
+    16→  { code: "HBSE", name: "HBSE", fullName: "Haryana Board of School Education (BSEH)", region: "Haryana", website: "https://bseh.org.in" },
+    17→  { code: "BSEB", name: "BSEB", fullName: "Bihar School Examination Board", region: "Bihar", website: "https://biharboardonline.bihar.gov.in" },
+    18→  { code: "KERALA", name: "Kerala Board", fullName: "DHSE Kerala / SCERT Kerala", region: "Kerala", website: "https://dhsekerala.gov.in" },
+    19→];
+    20→
+    21→type SubDef = { name: string; slug: string; chapters: string[] };
+    22→
+    23→const GENERIC_LANG = (cls: string): SubDef[] => [
+    24→  { name: "English", slug: "english", chapters: ["Reading Comprehension", "Writing Skills & Grammar", "Literature – Prose", "Literature – Poetry", "Vocabulary & Usage"] },
+    25→  { name: "Hindi", slug: "hindi", chapters: ["अपठित गद्यांश (Unseen Passage)", "व्याकरण (Grammar)", "पत्र व निबंध लेखन (Writing)", "काव्य खंड (Poetry)", "गद्य खंड (Prose)"] },
+    26→];
+    27→
+    28→const CURRICULUM: Record<number, SubDef[]> = {
+    29→  9: [
+    30→    { name: "Maths", slug: "maths", chapters: ["Number Systems", "Polynomials", "Coordinate Geometry", "Linear Equations in Two Variables", "Introduction to Euclid's Geometry", "Lines and Angles", "Triangles", "Quadrilaterals", "Circles", "Heron's Formula", "Surface Areas and Volumes", "Statistics", "Probability"] },
+    31→    { name: "Science", slug: "science", chapters: ["Matter in Our Surroundings", "Is Matter Around Us Pure?", "Atoms and Molecules", "Structure of the Atom", "The Fundamental Unit of Life", "Tissues", "Motion", "Force and Laws of Motion", "Gravitation", "Work and Energy", "Sound", "Improvement in Food Resources"] },
+    32→    { name: "Social Science", slug: "social-science", chapters: ["India – Size and Location", "Physical Features of India", "Drainage", "Climate", "Natural Vegetation and Wildlife", "Population", "What is Democracy? Why Democracy?", "Constitutional Design", "Electoral Politics", "Democratic Rights", "The French Revolution", "Nazism and the Rise of Hitler"] },
+    33→    ...GENERIC_LANG("9"),
+    34→  ],
+    35→  10: [
+    36→    { name: "Maths", slug: "maths", chapters: ["Real Numbers", "Polynomials", "Pair of Linear Equations in Two Variables", "Quadratic Equations", "Arithmetic Progressions", "Triangles", "Coordinate Geometry", "Introduction to Trigonometry", "Some Applications of Trigonometry", "Circles", "Areas Related to Circles", "Surface Areas and Volumes", "Statistics", "Probability"] },
+    37→    { name: "Science", slug: "science", chapters: ["Chemical Reactions and Equations", "Acids, Bases and Salts", "Metals and Non-metals", "Carbon and its Compounds", "Life Processes", "Control and Coordination", "How do Organisms Reproduce?", "Heredity", "Light – Reflection and Refraction", "The Human Eye and the Colourful World", "Electricity", "Magnetic Effects of Electric Current", "Our Environment"] },
+    38→    { name: "Social Science", slug: "social-science", chapters: ["The Rise of Nationalism in Europe", "Nationalism in India", "The Making of a Global World", "Print Culture and the Modern World", "Resources and Development", "Water Resources", "Agriculture", "Manufacturing Industries", "Power Sharing", "Federalism", "Political Parties", "Development", "Sectors of the Indian Economy", "Money and Credit", "Globalisation and the Indian Economy", "Consumer Rights"] },
+    39→    ...GENERIC_LANG("10"),
+    40→  ],
+    41→  11: [
+    42→    { name: "Physics", slug: "physics", chapters: ["Units and Measurements", "Motion in a Straight Line", "Motion in a Plane", "Laws of Motion", "Work, Energy and Power", "System of Particles and Rotational Motion", "Gravitation", "Mechanical Properties of Solids", "Mechanical Properties of Fluids", "Thermal Properties of Matter", "Thermodynamics", "Kinetic Theory", "Oscillations", "Waves"] },
+    43→    { name: "Chemistry", slug: "chemistry", chapters: ["Some Basic Concepts of Chemistry", "Structure of Atom", "Classification of Elements and Periodicity in Properties", "Chemical Bonding and Molecular Structure", "Thermodynamics", "Equilibrium", "Redox Reactions", "Organic Chemistry – Some Basic Principles and Techniques", "Hydrocarbons"] },
+    44→    { name: "Maths", slug: "maths", chapters: ["Sets", "Relations and Functions", "Trigonometric Functions", "Complex Numbers and Quadratic Equations", "Linear Inequalities", "Permutations and Combinations", "Binomial Theorem", "Sequences and Series", "Straight Lines", "Conic Sections", "Introduction to Three Dimensional Geometry", "Limits and Derivatives", "Statistics", "Probability"] },
+    45→    { name: "Biology", slug: "biology", chapters: ["The Living World", "Biological Classification", "Plant Kingdom", "Animal Kingdom", "Morphology of Flowering Plants", "Cell: The Unit of Life", "Biomolecules", "Cell Cycle and Cell Division", "Photosynthesis in Higher Plants", "Respiration in Plants", "Breathing and Exchange of Gases", "Body Fluids and Circulation", "Neural Control and Coordination", "Chemical Coordination and Integration"] },
+    46→    { name: "Economics", slug: "economics", chapters: ["Introduction to Economics", "Collection & Organisation of Data", "Presentation of Data", "Measures of Central Tendency", "Correlation", "Index Numbers", "Indian Economy (1950-1990)", "Economic Reforms since 1991", "Poverty & Rural Development"] },
+    47→    ...GENERIC_LANG("11"),
+    48→  ],
+    49→  12: [
+    50→    { name: "Physics", slug: "physics", chapters: ["Electric Charges and Fields", "Electrostatic Potential and Capacitance", "Current Electricity", "Moving Charges and Magnetism", "Magnetism and Matter", "Electromagnetic Induction", "Alternating Current", "Electromagnetic Waves", "Ray Optics and Optical Instruments", "Wave Optics", "Dual Nature of Radiation and Matter", "Atoms", "Nuclei", "Semiconductor Electronics"] },
+    51→    { name: "Chemistry", slug: "chemistry", chapters: ["Solutions", "Electrochemistry", "Chemical Kinetics", "The d- and f-Block Elements", "Coordination Compounds", "Haloalkanes and Haloarenes", "Alcohols, Phenols and Ethers", "Aldehydes, Ketones and Carboxylic Acids", "Amines", "Biomolecules"] },
+    52→    { name: "Maths", slug: "maths", chapters: ["Relations and Functions", "Inverse Trigonometric Functions", "Matrices", "Determinants", "Continuity and Differentiability", "Application of Derivatives", "Integrals", "Application of Integrals", "Differential Equations", "Vector Algebra", "Three Dimensional Geometry", "Linear Programming", "Probability"] },
+    53→    { name: "Biology", slug: "biology", chapters: ["Sexual Reproduction in Flowering Plants", "Human Reproduction", "Reproductive Health", "Principles of Inheritance and Variation", "Molecular Basis of Inheritance", "Evolution", "Human Health and Disease", "Microbes in Human Welfare", "Biotechnology: Principles and Processes", "Biotechnology and its Applications", "Organisms and Populations", "Ecosystem", "Biodiversity and Conservation"] },
+    54→    { name: "Economics", slug: "economics", chapters: ["National Income & Related Aggregates", "Money and Banking", "Determination of Income and Employment", "Government Budget", "Open Economy Macroeconomics", "Development Experience of India", "Employment & Infrastructure", "Sustainable Development"] },
+    55→    ...GENERIC_LANG("12"),
+    56→  ],
+    57→};
+    58→
+    59→// ORIGINAL seed notes (written from scratch for this project — no textbook text)
+    60→const SEED_NOTES: Record<string, string> = {
+    61→  "10-maths-1": `# Real Numbers — Revision Notes
+    62→
+    63→## Introduction
+    64→Real numbers combine every rational and irrational number into one family, and this chapter builds the number toolbox you will use all through Class 10 board maths. Two big ideas drive the exam: the **Fundamental Theorem of Arithmetic** (prime factorisation) and **irrationality proofs**.
+    65→
+    66→## Key Concepts
+    67→
+    68→### Euclid's Division Lemma
+    69→For any two positive integers a and b, there exist unique integers q (quotient) and r (remainder) such that a = bq + r, with 0 ≤ r < b. It is the formal way of saying "divide and write the remainder". It powers the **Euclid division algorithm**, a step-by-step method to compute the HCF of two numbers: keep dividing the divisor by the remainder until the remainder becomes 0; the last non-zero remainder is the HCF.
+    70→
+    71→### Fundamental Theorem of Arithmetic
+    72→Every composite number can be written as a product of primes, and this factorisation is unique apart from the order of factors. For example, 84 = 2 × 2 × 3 × 7, no matter how you start. This uniqueness is why HCF and LCM can be computed from prime factorisations: HCF takes the **lowest power** of common primes, LCM takes the **highest power** of all primes present.
+    73→
+    74→### HCF × LCM relation
+    75→For any two positive integers a and b: HCF(a, b) × LCM(a, b) = a × b. Handy shortcut: find the HCF first, then divide a × b by it to get the LCM. Note this product rule is valid for **two** numbers only — for three numbers you must find each value separately.
+    76→
+    77→### Irrational numbers
+    78→A number is irrational if it cannot be written as p/q with integers p, q (q ≠ 0). Their decimal expansions are non-terminating and non-repeating. The classic exam proof shows √2, √3 or √5 are irrational by contradiction: assume √2 = p/q in lowest terms, show both p and q must then be even, contradicting "lowest terms".
+    79→
+    80→### Decimal expansion logic
+    81→For a rational p/q in lowest terms, the expansion terminates exactly when the prime factorisation of q contains only 2s and/or 5s; otherwise it repeats. This gives quick one-mark answers like "17/3125 terminates because 3125 = 5⁵".
+    82→
+    83→## Example
+    84→Find HCF and LCM of 26 and 91.
+    85→- 26 = 2 × 13; 91 = 7 × 13.
+    86→- HCF = 13 (common prime, lowest power).
+    87→- LCM = 2 × 7 × 13 = 182 (all primes, highest power).
+    88→- Check: 13 × 182 = 2366 = 26 × 91 ✓
+    89→
+    90→## Quick Revision
+    91→- HCF: product of common primes with lowest powers.
+    92→- LCM: product of all primes with highest powers.
+    93→- HCF × LCM = product of the two numbers.
+    94→- Every composite number has a unique prime factorisation.
+    95→- √2, √3, √5 are irrational; sums of rational + irrational are always irrational.
+    96→- p/q terminates ⇔ q (lowest form) has only 2s and 5s.
+    97→- Euclid's algorithm: last non-zero remainder = HCF.
+    98→
+    99→## Exam Tips
+   100→- The 3-mark "prove √n is irrational" proof needs the "assume lowest terms → contradiction" structure; write every step.
+   101→- Word problems on bells/traffic lights/tanks circling together usually need **LCM**; splitting into groups needs **HCF**.
+   102→- Never skip writing the given/assumption lines in proofs — step marking rewards them.
+   103→- Practise mixed questions where HCF/LCM of three numbers is asked; the product shortcut fails there.
+   104→- Keep factorisation of numbers up to 100 memorised for speed.`,
+   105→  "10-science-1": `# Chemical Reactions and Equations — Revision Notes
+   106→
+   107→## Introduction
+   108→This opening chapter trains you to read and write chemical equations correctly and to classify reactions — the skill behind almost every later chemistry chapter. Expect 3-5 marks from this chapter in boards, mostly as equation-based questions.
+   109→
+   110→## Key Concepts
+   111→
+   112→### Writing a balanced equation
+   113→A chemical equation must obey the **law of conservation of mass**: atoms of each element must be equal on both sides. Balancing is done by adjusting coefficients (the big numbers), never the subscripts. States are shown as (s), (l), (g), (aq). Conditions like heat are written above the arrow.
+   114→
+   115→### Combination & decomposition
+   116→- **Combination**: two or more reactants form one product, e.g. CaO + H₂O → Ca(OH)₂ + heat. Quicklime slaking is strongly exothermic.
+   117→- **Decomposition**: one reactant breaks into several, needing energy: thermal (heat), electrolytic (electricity, e.g. water → H₂ + O₂), or photolytic (light, e.g. silver chloride greying in sunlight — used in photography).
+   118→
+   119→### Displacement & double displacement
+   120→- **Displacement**: a more reactive metal pushes out a less reactive one from its salt solution, e.g. Fe + CuSO₄ → FeSO₄ + Cu (blue fades to green). The reactivity series decides who wins.
+   121→- **Double displacement**: ions swap partners. If an insoluble solid forms, it is a **precipitation reaction**; if heat is released between two solutions, it is a **neutralisation**.
+   122→
+   123→### Redox idea
+   124→Oxidation = gain of oxygen / loss of electrons; reduction = loss of oxygen / gain of electrons. In ZnO + C → Zn + CO, carbon is the reducing agent and zinc oxide is reduced. In photosynthesis the reverse pairing happens.
+   125→
+   126→### Exothermic vs endothermic
+   127→Exothermic reactions release heat (respiration, burning, slaking of lime). Endothermic reactions absorb heat (decomposition of limestone, photosynthesis). Both are common 1-mark "identify the type" questions.
+   128→
+   129→### Corrosion & rancidity
+   130→Corrosion: metal surface is attacked by air/moisture (rust on iron, black coating on silver, green patina on copper). Prevention: painting, oiling, galvanisation, alloying. Rancidity: fats/oils oxidise giving bad smell; prevented by antioxidants, airtight packaging, nitrogen flushing (chip packets).
+   131→
+   132→## Example
+   133→Balance: Fe + H₂O → Fe₃O₄ + H₂ (steam).
+   134→Balanced form: 3Fe + 4H₂O → Fe₃O₄ + 4H₂. Count: Fe 3=3, H 8=8, O 4=4 ✓ Type: displacement + redox.
+   135→
+   136→## Quick Revision
+   137→- Balance by counting atoms element-by-element; smallest whole-number coefficients win.
+   138→- Combination: many → one. Decomposition: one → many.
+   139→- More reactive metal displaces less reactive metal from its salt.
+   140→- Precipitate = insoluble product in double displacement.
+   141→- Oxidation and reduction always happen together (redox).
+   142→- Silver chloride turns grey in light — photolytic decomposition.
+   143→- Rancid chips packets are flushed with nitrogen.
+   144→
+   145→## Exam Tips
+   146→- Always write physical states when asked for a "complete" equation — marks are reserved for them.
+   147→- Name the type of reaction **and** justify in one line; naming alone often loses half marks.
+   148→- For balancing, tally atoms in a small table; it prevents silly slip-ups.
+   149→- Learn the reactivity series mnemonic up to copper — displacement questions depend on it.
+   150→- Practice converting word equations to formula equations first, then balance.`,
+   151→  "9-science-7": `# Motion — Revision Notes
+   152→
+   153→## Introduction
+   154→Motion is the first formal physics chapter of Class 9: you learn to describe *how* things move using distance, displacement, velocity and acceleration, and to read motion graphs. It sets the language for Newton's laws in the next chapter.
+   155→
+   156→## Key Concepts
+   157→
+   158→### Distance vs displacement
+   159→Distance is the total path length — a scalar. Displacement is the straight-line shortest separation between start and end points with direction — a vector. On a closed round trip, distance is large but displacement is zero.
+   160→
+   161→### Speed vs velocity
+   162→Speed = distance/time (scalar). Velocity = displacement/time (vector). Average velocity for uniform acceleration = (u + v)/2. Instantaneous velocity is what the speedometer shows at a moment.
+   163→
+   164→### Acceleration
+   165→Acceleration a = (v − u)/t, unit m/s². Positive when speeding up, negative (retardation) when slowing down. Uniform acceleration means the velocity changes by equal amounts in equal times.
+   166→
+   167→### Three equations of motion (uniform acceleration)
+   168→1. v = u + at
+   169→2. s = ut + ½at²
+   170→3. v² = u² + 2as
+   171→Here u = initial velocity, v = final velocity, s = displacement, t = time. Choose the equation that links the three quantities you know with the one you want.
+   172→
+   173→### Graphs
+   174→- Distance-time: slope = speed. Straight sloping line = uniform speed; horizontal line = rest; curve = changing speed.
+   175→- Velocity-time: slope = acceleration; **area under the curve = displacement**. A horizontal v-t line means uniform velocity.
+   176→
+   177→### Uniform circular motion
+   178→An object moving on a circle with constant speed is still accelerating, because its **direction** keeps changing. Velocity is tangential; acceleration points to the centre. Example: a stone whirled on a thread.
+   179→
+   180→## Example
+   181→A bus slows from 20 m/s to rest in 5 s uniformly. Find acceleration and distance.
+   182→a = (0 − 20)/5 = −4 m/s² (retardation).
+   183→s = ut + ½at² = 20×5 + ½(−4)(25) = 100 − 50 = 50 m.
+   184→Or v² = u² + 2as → s = (0 − 400)/(2×(−4)) = 50 m ✓
+   185→
+   186→## Quick Revision
+   187→- Displacement can be zero even when distance is not.
+   188→- Average velocity = (u + v)/2 only for uniform acceleration.
+   189→- Slope of s-t graph = speed; slope of v-t graph = acceleration.
+   190→- Area under v-t graph = distance travelled.
+   191→- Negative acceleration is retardation, not negative motion.
+   192→- Uniform circular motion has constant speed but changing velocity.
+   193→
+   194→## Exam Tips
+   195→- Draw the v-t graph before solving long numericals; the area method often saves time.
+   196→- Always convert units first (km/h → m/s by dividing by 3.6).
+   197→- Write the equation number you are using — numericals are step-marked.
+   198→- In round-trip questions, compute distance and displacement separately.
+   199→- Remember "rest" appears as a horizontal line on BOTH graph types but at s = constant or v = 0 respectively.`,
+   200→  "12-physics-1": `# Electric Charges and Fields — Revision Notes
+   201→
+   202→## Introduction
+   203→This chapter opens electrostatics: how charges behave at rest, the fields they create, and Gauss's law — the fastest tool for symmetric charge distributions. Boards regularly take 5-7 marks from here, including one derivation.
+   204→
+   205→## Key Concepts
+   206→
+   207→### Charge basics
+   208→Charge is quantised: q = ne, with e = 1.6 × 10⁻¹⁹ C. It is conserved in every isolated system and additive with sign. Like charges repel, unlike attract. Conductors let charges flow; insulators hold them fixed; charging by induction moves charge without contact.
+   209→
+   210→### Coulomb's law
+   211→F = k q₁q₂/r², with k = 1/(4πε₀) ≈ 9 × 10⁹ N m²/C². The force acts along the line joining the point charges, obeys Newton's third law, and is valid for point charges. In a medium of dielectric constant K, the force divides by K.
+   212→
+   213→### Electric field
+   214→E = F/q₀ (force per unit positive test charge), unit N/C or V/m. Field of a point charge: E = kq/r², radially outward for positive q. Field lines start on + and end on − charges, never cross, and their density shows strength.
+   215→
+   216→### Electric dipole
+   217→Two equal, opposite charges separated by 2a. Dipole moment p = q × 2a, directed from − to +. Axial field: E = 2kp/r³; equatorial field: E = kp/r³ (opposite to p). Torque in uniform field: τ = pE sinθ. Net force on a dipole in a uniform field is zero.
+   218→
+   219→### Gauss's law
+   220→Total flux through a closed surface Φ = q(enclosed)/ε₀. Flux counts field lines; charges outside contribute zero net flux. Standard results: infinite wire → E = λ/(2πε₀r); infinite sheet → E = σ/(2ε₀) (independent of distance); charged spherical shell → outside like a point charge, inside E = 0.
+   221→
+   222→## Example
+   223→Two +2 μC charges sit 3 cm apart in air. Field at the midpoint?
+   224→Each charge is 1.5 cm = 0.015 m away; fields are equal and opposite → E = 0. Point-charge symmetry kills the field at the centre of two equal like charges.
+   225→
+   226→## Quick Revision
+   227→- q = ne; e is the smallest free charge.
+   228→- Coulomb force in medium drops by factor K.
+   229→- E is force per unit test charge, pointing away from + charge.
+   230→- Field lines never intersect; they are dense where E is strong.
+   231→- Dipole: axial 2kp/r³, equatorial kp/r³, τ = pE sinθ.
+   232→- Gauss: Φ = q(in)/ε₀ — only enclosed charge matters.
+   233→- Inside a conductor/shell, electrostatic field is zero.
+   234→
+   235→## Exam Tips
+   236→- State all symbols and units in derivations — step marking checks them.
+   237→- Use Gauss's law only when symmetry exists (sphere, wire, sheet); otherwise fall back to Coulomb summation.
+   238→- Draw the field-line diagram; labelled diagrams earn marks even in numericals.
+   239→- Memorise the three Gauss results with their distance dependence (1/r², 1/r, constant).
+   240→- In dipole torque questions, specify the angle θ between p and E clearly.`,
+   241→  "11-maths-1": `# Sets — Revision Notes
+   242→
+   243→## Introduction
+   244→Sets is the language of Class 11 mathematics: every later topic (functions, probability, relations) is written in set notation. The chapter is mostly notation and logic, making it one of the easiest scoring chapters if you know the laws cold.
+   245→
+   246→## Key Concepts
+   247→
+   248→### Representing sets
+   249→A set is a well-defined collection. Roster form lists elements {2, 4, 6}; set-builder form describes a rule {x : x = 2n, n ∈ N, 1 ≤ n ≤ 3}. Order and repetition don't matter: {1, 2} = {2, 1, 1}.
+   250→
+   251→### Types of sets
+   252→Empty set ∅ (no elements), singleton (one element), finite and infinite sets, equal sets (same elements), equivalent sets (same number/cardinality of elements). Note: ∅ has 0 elements but {∅} has 1.
+   253→
+   254→### Subsets and power set
+   255→A ⊆ B if every element of A lies in B. Every set has 2ⁿ subsets (n = number of elements) and 2ⁿ − 1 proper subsets. Intervals like [a, b], (a, b) are subsets of R written in interval notation.
+   256→
+   257→### Venn diagrams & operations
+   258→Union A ∪ B (in A or B), intersection A ∩ B (in both), difference A − B (in A, not B), complement A′ (in U, not A). Venn diagrams turn set problems into picture-counting problems — always draw them.
+   259→
+   260→### Laws
+   261→- De Morgan: (A ∪ B)′ = A′ ∩ B′ and (A ∩ B)′ = A′ ∪ B′.
+   262→- Distributive: A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C); dual with ∩/∪ swapped.
+   263→- Idempotent, commutative, associative laws hold for ∪ and ∩.
+   264→
+   265→### Cardinality formula
+   266→n(A ∪ B) = n(A) + n(B) − n(A ∩ B).
+   267→Three sets: n(A ∪ B ∪ C) = n(A)+n(B)+n(C) − n(A∩B) − n(B∩C) − n(A∩C) + n(A∩B∩C). This is the engine of every "survey/inclusion-exclusion" word problem.
+   268→
+   269→## Example
+   270→In a class, 40 like maths, 25 like physics, 12 like both. How many like at least one subject?
+   271→n(M ∪ P) = 40 + 25 − 12 = 53 students.
+   272→
+   273→## Quick Revision
+   274→- 2ⁿ subsets, 2ⁿ − 1 proper subsets for an n-element set.
+   275→- {∅} ≠ ∅; {0} is a singleton, not empty.
+   276→- De Morgan's two laws swap ∪↔∩ with a complement.
+   277→- n(A ∪ B) = n(A) + n(B) − n(A ∩ B).
+   278→- Equivalent sets have equal cardinality; equal sets are identical.
+   279→- Complement is always taken relative to the universal set U.
+   280→
+   281→## Exam Tips
+   282→- Write the law you are applying before each simplification step in proofs.
+   283→- For word problems, define sets with letters first (let M = students who like maths…).
+   284→- Draw a three-circle Venn diagram with the innermost overlap filled first.
+   285→- Watch words: "only maths" means n(A) − n(A ∩ B), not n(A).
+   286→- Check subset questions for the empty set and the set itself — both always count.`,
+   287→  "12-biology-4": `# Principles of Inheritance and Variation — Revision Notes
+   288→
+   289→## Introduction
+   290→This genetics chapter carries one of the highest weightages in Class 12 biology. It builds from Mendel's pea experiments to chromosome theory, linkage, and human genetic disorders — conceptual clarity here also powers the Molecular Basis of Inheritance chapter.
+   291→
+   292→## Key Concepts
+   293→
+   294→### Mendel's laws
+   295→- **Law of Dominance**: in a monohybrid cross, only the dominant trait shows in F₁ (tall × dwarf → all tall).
+   296→- **Law of Segregation**: alleles separate cleanly during gamete formation; F₂ shows 3 : 1 phenotype and 1 : 2 : 1 genotype. This is the only law without exceptions among Mendel's three.
+   297→- **Law of Independent Assortment**: allele pairs for different traits separate independently in a dihybrid cross, giving the 9 : 3 : 3 : 1 F₂ ratio. Valid only for genes on different chromosomes or far apart on the same one.
+   298→
+   299→### Test cross & back cross
+   300→Test cross mates a dominant-phenotype individual with the recessive parent type: a 1 : 1 ratio reveals a heterozygote. It is the standard "find the genotype" tool.
+   301→
+   302→### Incomplete & codominance
+   303→- Incomplete dominance: heterozygote is intermediate (snapdragon: red × white → pink, F₂ 1 : 2 : 1).
+   304→- Codominance: both alleles express together (AB blood group; ABO alleles Iᴬ, Iᴮ codominant, i recessive).
+   305→
+   306→### Chromosome theory & linkage
+   307→Sutton and Boveri united Mendel's factors with chromosomes. Genes on the same chromosome show **linkage**; recombinant frequency depends on distance (closer = fewer recombinants). Drosophila linkage maps came from these ratios.
+   308→
+   309→### Sex determination & disorders
+   310→Humans: XX female, XY male; the father's gamete decides the child's sex. Mendelian disorders include haemophilia (X-linked recessive), sickle-cell anaemia (autosomal recessive codominant), phenylketonuria. Chromosomal disorders: Down syndrome (trisomy 21), Turner's syndrome (XO female), Klinefelter's syndrome (XXY male).
+   311→
+   312→## Example
+   313→Cross a carrier mother (XᴴXʰ) with a normal father (XᴴY) for haemophilia.
+   314→Gametes: Xᴴ, Xʰ × Xᴴ, Y → daughters: ½ carrier; sons: ½ affected. So 25% of children (only boys) are expected haemophiliacs.
+   315→
+   316→## Quick Revision
+   317→- F₂ monohybrid: 3 : 1 phenotype, 1 : 2 : 1 genotype.
+   318→- Dihybrid F₂: 9 : 3 : 3 : 1 needs independent assortment.
+   319→- Test cross reveals heterozygosity (1 : 1 result).
+   320→- Blood group AB shows codominance; pink snapdragon shows incomplete dominance.
+   321→- Recombination frequency ↑ with gene distance on a chromosome.
+   322→- Father determines the sex of the child in humans.
+   323→- Down = trisomy 21; Turner = XO; Klinefelter = XXY.
+   324→
+   325→## Exam Tips
+   326→- Always draw a Punnett square with gametes labelled — it carries step marks.
+   327→- Name the ratio AND the law behind it when answering "identify the cross" questions.
+   328→- Keep a one-line mnemonic for chromosomal disorders: Down-21, Turner-XO, Klinefelter-XXY.
+   329→- In pedigree problems, eliminate X-linked recessive if father-to-son transmission appears.
+   330→- Practise writing gametes in one line before the square; most errors start there.`,
+   331→  "12-chemistry-1": `# Solutions — Revision Notes
+   332→
+   333→## Introduction
+   334→Solutions is the first physical-chemistry chapter of Class 12 and a favourite for numericals: concentration terms, Raoult's law, colligative properties and their anomalies (abnormal molar mass) together account for 5-7 board marks.
+   335→
+   336→## Key Concepts
+   337→
+   338→### Types & concentration terms
+   339→Binary solutions have solute + solvent. Key expressions: molarity M = mol solute/L solution (temperature-dependent); molality m = mol solute/kg solvent (temperature-independent); mole fraction x; parts per million for trace amounts. Know when each is preferred.
+   340→
+   341→### Solubility ideas
+   342→"Like dissolves like": polar solvents dissolve polar solutes. Gases dissolve less as temperature rises but more under high pressure — **Henry's law**: p = K_H x. High K_H means low solubility; this law explains soda fizzing out when opened and the bends in scuba divers.
+   343→
+   344→### Raoult's law
+   345→Vapour pressure of a component = mole fraction × pure-component vapour pressure: p₁ = x₁ p₁°. Ideal solutions obey it across all ranges (benzene–toluene). Positive deviation (A–B attractions weaker) gives higher p than ideal; negative deviation (stronger A–B, e.g. acetone+chloroform) gives lower p. Azeotropes boil at constant composition and cannot be split by simple distillation.
+   346→
+   347→### Colligative properties
+   348→Depend only on the NUMBER of solute particles: (1) relative lowering of vapour pressure, (2) elevation of boiling point ΔT_b = K_b·m, (3) depression of freezing point ΔT_f = K_f·m, (4) osmotic pressure π = CRT (best for polymers/proteins). These give molar masses; isotonic solutions have equal π.
+   349→
+   350→### Abnormal molar mass
+   351→Dissociation (NaCl → 2 particles) makes properties larger → observed molar mass lower. Association (benzoic acid dimerises in benzene) does the reverse. The **van't Hoff factor** i = normal molar mass / abnormal molar mass corrects every colligative formula.
+   352→
+   353→## Example
+   354→0.1 m NaCl solution: i ≈ 2, so effective particle molality = 0.2 m. Its freezing point drops about twice as much as 0.1 m glucose (i = 1) — dissociation doubles the particle count, not the moles.
+   355→
+   356→## Quick Revision
+   357→- Molality & mole fraction don't change with temperature; molarity does.
+   358→- Henry: p = K_H x — higher K_H, less soluble gas.
+   359→- Ideal solution obeys Raoult at every composition.
+   360→- Colligative = "count of particles", not their identity.
+   361→- π = CRT; isotonic solutions share equal osmotic pressure.
+   362→- i > 1 dissociation, i < 1 association, i = 1 ideal nonelectrolyte.
+   363→- ΔT_f and ΔT_b scale with molality × i.
+   364→
+   365→## Exam Tips
+   366→- State units of K_b, K_f and K_H — numericals lose marks on unit slips.
+   367→- Write "i = 2 (assuming complete dissociation)" before NaCl/CaCl₂ calculations.
+   368→- Choose osmotic pressure for macromolecules: other methods need large measurable amounts.
+   369→- In deviation questions, first compare A–B attraction strength with A–A and B–B.
+   370→- Practise interconversion of molarity ↔ molality using density; it appears every few years.`,
+   371→  "9-maths-1": `# Number Systems — Revision Notes
+   372→
+   373→## Introduction
+   374→Number Systems extends your number family from rationals to the full real line: you classify numbers, meet irrational roots, and locate them on the number line. It is the base for every algebra chapter that follows.
+   375→
+   376→## Key Concepts
+   377→
+   378→### Number family
+   379→Natural (N) ⊂ whole (W) ⊂ integers (Z) ⊂ rational (Q) ⊂ real (R). Rationals are expressible as p/q (q ≠ 0); irrationals are not. Every real number has a unique position on the number line.
+   380→
+   381→### Decimal expansions
+   382→Rational numbers give terminating decimals (7/8 = 0.875) or repeating decimals (1/3 = 0.333…). Irrational numbers give non-terminating, non-repeating decimals like √2 = 1.41421356… The q-test: p/q (lowest terms) terminates iff q = 2ᵐ5ⁿ.
+   383→
+   384→### Irrational numbers
+   385→√2, √3, π, 0.101101110… are irrational. Key closure facts: sum/product of two irrationals **may** be rational (√2 × √2 = 2) — check, don't assume. Rational + irrational is always irrational.
+   386→
+   387→### Locating √n on the number line
+   388→Spiral/semicircle construction: for √2, draw a right triangle with legs 1 and 1 (hypotenuse √2), transfer the length to the number line with a compass. Repeating with hypotenuse as a leg builds √3, √4, … — the "spiral of roots".
+   389→
+   390→### Laws of exponents (real bases)
+   391→aᵐ × aⁿ = aᵐ⁺ⁿ; aᵐ/aⁿ = aᵐ⁻ⁿ; (aᵐ)ⁿ = aᵐⁿ; a⁰ = 1 (a ≠ 0); a⁻ᵐ = 1/aᵐ. Fractional index n√a = a^(1/n), and a^(p/q) = (q√a)ᵖ. Rationalisation removes surds from denominators by multiplying with the conjugate.
+   392→
+   393→## Example
+   394→Simplify (√5 + √3)(√5 − √3).
+   395→= (√5)² − (√3)² = 5 − 3 = 2. The conjugate pair turns surds into a clean rational — this pattern is asked repeatedly.
+   396→
+   397→## Quick Revision
+   398→- p/q terminates ⇔ q has only 2s and 5s (lowest terms).
+   399→- Rational + irrational = always irrational.
+   400→- √2 × √2 = 2 shows irrational × irrational can be rational.
+   401→- √n construction: right triangle + compass transfer.
+   402→- a^(1/n) = nth root; a^(p/q) = q√(aᵖ).
+   403→- Rationalise by multiplying numerator and denominator by the conjugate.
+   404→
+   405→## Exam Tips
+   406→- For "classify the number" questions, show the p/q test or the non-repeating decimal argument, not just the label.
+   407→- Practise compass constructions neatly — construction marks carry marks.
+   408→- In rationalisation, conjugate of a + √b is a − √b; write both multiplications.
+   409→- Convert recurring decimals to fractions with 10ˣ/9…9 subtraction once; it reappears in Class 10.
+   410→- Never write √(a+b) = √a + √b — it is wrong; expand squares instead.`,
+   411→};
+   412→
+   413→// ORIGINAL seed questions
+   414→const SEED_QUESTIONS: Array<{
+   415→  grade: number; subject: string; text: string; options: string[]; answer: string; explanation: string; difficulty: string; chapterName: string;
+   416→}> = [
+   417→  { grade: 10, subject: "Maths", chapterName: "Real Numbers", difficulty: "EASY",
+   418→    text: "The HCF of 12 and 18 is 6. Using the relation HCF × LCM = a × b, what is their LCM?",
+   419→    options: ["A) 36", "B) 24", "C) 216", "D) 30"], answer: "A) 36",
+   420→    explanation: "LCM = (12 × 18)/6 = 216/6 = 36.", },
+   421→  { grade: 10, subject: "Maths", chapterName: "Real Numbers", difficulty: "MEDIUM",
+   422→    text: "Which of these decimal expansions must be terminating?",
+   423→    options: ["A) 22/7", "B) 13/3125", "C) 4/11", "D) 1/6"], answer: "B) 13/3125",
+   424→    explanation: "3125 = 5⁵ contains only 5s, so the fraction terminates; the others have 7, 11 or 2×3 factors.", },
+   425→  { grade: 10, subject: "Maths", chapterName: "Quadratic Equations", difficulty: "MEDIUM",
+   426→    text: "For x² − 6x + k = 0 to have two equal real roots, k must equal:",
+   427→    options: ["A) 6", "B) 9", "C) 12", "D) 3"], answer: "B) 9",
+   428→    explanation: "Equal roots need discriminant 0: 36 − 4k = 0 ⇒ k = 9.", },
+   429→  { grade: 10, subject: "Maths", chapterName: "Introduction to Trigonometry", difficulty: "HARD",
+   430→    text: "If sinθ = 3/5 (θ acute), then tanθ equals:",
+   431→    options: ["A) 4/5", "B) 5/4", "C) 3/4", "D) 4/3"], answer: "C) 3/4",
+   432→    explanation: "cosθ = 4/5 by Pythagoras, so tanθ = sinθ/cosθ = 3/4.", },
+   433→  { grade: 10, subject: "Maths", chapterName: "Arithmetic Progressions", difficulty: "MEDIUM",
+   434→    text: "The 10th term of the AP 3, 7, 11, … is:",
+   435→    options: ["A) 40", "B) 39", "C) 43", "D) 37"], answer: "B) 39",
+   436→    explanation: "a = 3, d = 4 ⇒ a₁₀ = 3 + 9×4 = 39.", },
+   437→  { grade: 10, subject: "Science", chapterName: "Chemical Reactions and Equations", difficulty: "EASY",
+   438→    text: "Respiration in living cells is an example of which type of reaction?",
+   439→    options: ["A) Endothermic decomposition", "B) Exothermic oxidation", "C) Photochemical reduction", "D) Neutralisation"], answer: "B) Exothermic oxidation",
+   440→    explanation: "Glucose is oxidised to CO₂ and water, releasing energy as heat — exothermic oxidation.", },
+   441→  { grade: 10, subject: "Science", chapterName: "Acids, Bases and Salts", difficulty: "MEDIUM",
+   442→    text: "A solution turns phenolphthalein pink. Its pH is most likely:",
+   443→    options: ["A) 2", "B) 5", "C) 7", "D) 10"], answer: "D) 10",
+   444→    explanation: "Phenolphthalein is pink in basic solutions (pH above ~8.2); pH 10 is basic.", },
+   445→  { grade: 10, subject: "Science", chapterName: "Light – Reflection and Refraction", difficulty: "MEDIUM",
+   446→    text: "An object placed at the principal focus of a concave mirror forms an image that is:",
+   447→    options: ["A) Virtual and erect at focus", "B) Real, inverted and highly diminished at focus", "C) Real, inverted and highly enlarged at infinity", "D) Same size at centre of curvature"], answer: "C) Real, inverted and highly enlarged at infinity",
+   448→    explanation: "When the object is at F, reflected rays become parallel, so the image forms at infinity, real, inverted and highly enlarged.", },
+   449→  { grade: 10, subject: "Science", chapterName: "Electricity", difficulty: "HARD",
+   450→    text: "Two 6 Ω resistors are connected in parallel and the combination in series with a 3 Ω resistor. Total resistance is:",
+   451→    options: ["A) 6 Ω", "B) 9 Ω", "C) 4 Ω", "D) 15 Ω"], answer: "A) 6 Ω",
+   452→    explanation: "Parallel pair: 3 Ω. In series with 3 Ω: 3 + 3 = 6 Ω.", },
+   453→  { grade: 10, subject: "Science", chapterName: "Life Processes", difficulty: "EASY",
+   454→    text: "Which structure increases the absorptive surface of the human small intestine?",
+   455→    options: ["A) Nephrons", "B) Villi", "C) Alveoli", "D) Neurons"], answer: "B) Villi",
+   456→    explanation: "Villi are finger-like folds of the intestinal lining that absorb digested food; alveoli belong to lungs, nephrons to kidneys.", },
+   457→  { grade: 9, subject: "Maths", chapterName: "Number Systems", difficulty: "MEDIUM",
+   458→    text: "Which of the following is an irrational number?",
+   459→    options: ["A) 0.252525…", "B) √16", "C) 0.1011011101110…", "D) 22/7 ÷ (22/7)"], answer: "C) 0.1011011101110…",
+   460→    explanation: "The pattern is non-terminating and non-repeating, hence irrational. 0.252525… repeats, √16 = 4, and (22/7)÷(22/7) = 1.", },
+   461→  { grade: 9, subject: "Maths", chapterName: "Polynomials", difficulty: "EASY",
+   462→    text: "If p(x) = x³ − 3x² + 2, then p(1) equals:",
+   463→    options: ["A) 0", "B) 1", "C) −1", "D) 2"], answer: "A) 0",
+   464→    explanation: "p(1) = 1 − 3 + 2 = 0, so (x − 1) is a factor.", },
+   465→  { grade: 9, subject: "Maths", chapterName: "Linear Equations in Two Variables", difficulty: "MEDIUM",
+   466→    text: "The graph of x = −3 is a line:",
+   467→    options: ["A) Parallel to x-axis", "B) Parallel to y-axis", "C) Passing through origin", "D) At 45° to both axes"], answer: "B) Parallel to y-axis",
+   468→    explanation: "x = constant fixes the x-coordinate everywhere, giving a vertical line parallel to the y-axis, 3 units left of origin.", },
+   469→  { grade: 9, subject: "Maths", chapterName: "Triangles", difficulty: "HARD",
+   470→    text: "In triangles ABC and PQR, AB = QR, BC = PR and CA = PQ. Then:",
+   471→    options: ["A) △ABC ≅ △PQR", "B) △ABC ≅ △QRP", "C) △ABC ≅ △RPQ", "D) Not congruent"], answer: "B) △ABC ≅ △QRP",
+   472→    explanation: "Match corresponding equal sides: A↔Q, B↔R, C↔P, so △ABC ≅ △QRP by SSS.", },
+   473→  { grade: 9, subject: "Maths", chapterName: "Statistics", difficulty: "EASY",
+   474→    text: "The mean of first five prime numbers is:",
+   475→    options: ["A) 5.2", "B) 5.6", "C) 6", "D) 4.6"], answer: "B) 5.6",
+   476→    explanation: "Primes: 2, 3, 5, 7, 11. Sum = 28, mean = 28/5 = 5.6.", },
+   477→  { grade: 9, subject: "Science", chapterName: "Motion", difficulty: "MEDIUM",
+   478→    text: "A car accelerates uniformly from rest to 20 m/s in 8 s. Its acceleration is:",
+   479→    options: ["A) 2.5 m/s²", "B) 2 m/s²", "C) 1.6 m/s²", "D) 4 m/s²"], answer: "A) 2.5 m/s²",
+   480→    explanation: "a = (v − u)/t = (20 − 0)/8 = 2.5 m/s².", },
+   481→  { grade: 9, subject: "Science", chapterName: "Gravitation", difficulty: "MEDIUM",
+   482→    text: "If the distance between two masses is doubled, the gravitational force between them becomes:",
+   483→    options: ["A) Double", "B) Half", "C) One-fourth", "D) Four times"], answer: "C) One-fourth",
+   484→    explanation: "Force ∝ 1/r²; doubling r multiplies force by 1/4.", },
+   485→  { grade: 9, subject: "Science", chapterName: "Atoms and Molecules", difficulty: "MEDIUM",
+   486→    text: "The number of molecules in 2 moles of CO₂ is approximately:",
+   487→    options: ["A) 6.022 × 10²³", "B) 1.2044 × 10²⁴", "C) 3.011 × 10²³", "D) 6.022 × 10²⁴"], answer: "B) 1.2044 × 10²⁴",
+   488→    explanation: "1 mole has 6.022 × 10²³ molecules, so 2 moles have 1.2044 × 10²⁴.", },
+   489→  { grade: 9, subject: "Science", chapterName: "Sound", difficulty: "EASY",
+   490→    text: "Sound waves in air are:",
+   491→    options: ["A) Transverse and mechanical", "B) Longitudinal and mechanical", "C) Longitudinal and electromagnetic", "D) Transverse and electromagnetic"], answer: "B) Longitudinal and mechanical",
+   492→    explanation: "Air particles vibrate along the direction of propagation, and a material medium is required — longitudinal mechanical wave.", },
+   493→  { grade: 9, subject: "Science", chapterName: "Tissues", difficulty: "MEDIUM",
+   494→    text: "Which tissue transports water and minerals upward in plants?",
+   495→    options: ["A) Phloem", "B) Xylem", "C) Parenchyma", "D) Cambium"], answer: "B) Xylem",
+   496→    explanation: "Xylem carries water and minerals from roots upward; phloem transports food both ways.", },
+   497→  { grade: 12, subject: "Physics", chapterName: "Electric Charges and Fields", difficulty: "MEDIUM",
+   498→    text: "The electric field inside a uniformly charged conducting spherical shell is:",
+   499→    options: ["A) kq/r²", "B) Zero", "C) Constant non-zero", "D) 2kq/r²"], answer: "B) Zero",
+   500→    explanation: "Charges reside on the surface; by Gauss's law no flux is enclosed by an interior surface, so E = 0 inside.", },
+   501→  { grade: 12, subject: "Physics", chapterName: "Current Electricity", difficulty: "MEDIUM",
+   502→    text: "Drift velocity of electrons in a conductor is of the order of:",
+   503→    options: ["A) 10⁸ m/s", "B) 10³ m/s", "C) 10⁻⁴ m/s", "D) 10⁻¹⁹ m/s"], answer: "C) 10⁻⁴ m/s",
+   504→    explanation: "Despite the huge random thermal speeds, the slow net drift is around fractions of a mm/s, i.e. ~10⁻⁴ m/s.", },
+   505→  { grade: 12, subject: "Physics", chapterName: "Moving Charges and Magnetism", difficulty: "HARD",
+   506→    text: "A charged particle enters a magnetic field parallel to B. Its path will be:",
+   507→    options: ["A) Circle", "B) Helix", "C) Straight line", "D) Parabola"], answer: "C) Straight line",
+   508→    explanation: "Magnetic force qv × B is zero when v is parallel to B, so the particle continues undeflected.", },
+   509→  { grade: 12, subject: "Physics", chapterName: "Ray Optics and Optical Instruments", difficulty: "MEDIUM",
+   510→    text: "Power of a convex lens of focal length 25 cm is:",
+   511→    options: ["A) +2.5 D", "B) +4 D", "C) −4 D", "D) +0.25 D"], answer: "B) +4 D",
+   512→    explanation: "P = 1/f(in metres) = 1/0.25 = +4 dioptre; convex lenses have positive power.", },
+   513→  { grade: 12, subject: "Physics", chapterName: "Alternating Current", difficulty: "EASY",
+   514→    text: "In a pure inductive AC circuit, current:",
+   515→    options: ["A) Leads voltage by π/2", "B) Lags voltage by π/2", "C) In phase with voltage", "D) Lags voltage by π"], answer: "B) Lags voltage by π/2",
+   516→    explanation: "For an inductor, current lags the applied voltage by 90°; in a capacitor it leads by 90°.", },
+   517→  { grade: 12, subject: "Chemistry", chapterName: "Solutions", difficulty: "MEDIUM",
+   518→    text: "Which concentration term does NOT change with temperature?",
+   519→    options: ["A) Molarity", "B) Molality", "C) Normality", "D) Volume percentage"], answer: "B) Molality",
+   520→    explanation: "Molality uses mass of solvent (mass is temperature-independent); the others involve volume, which expands on heating.", },
+   521→  { grade: 12, subject: "Chemistry", chapterName: "Electrochemistry", difficulty: "HARD",
+   522→    text: "For a spontaneous cell reaction, which must be true?",
+   523→    options: ["A) E°cell < 0", "B) ΔG° > 0", "C) E°cell > 0", "D) log K < 0"], answer: "C) E°cell > 0",
+   524→    explanation: "Spontaneity needs ΔG° = −nFE°cell < 0, which requires E°cell > 0 and hence log K > 0.", },
+   525→  { grade: 12, subject: "Chemistry", chapterName: "Chemical Kinetics", difficulty: "MEDIUM",
+   526→    text: "For a first-order reaction, the half-life is:",
+   527→    options: ["A) Proportional to initial concentration", "B) Inversely proportional to rate constant", "C) Independent of initial concentration", "D) Doubled when concentration doubles"], answer: "C) Independent of initial concentration",
+   528→    explanation: "t½ = 0.693/k for first order — a defining feature; zero-order half-life does depend on concentration.", },
+   529→  { grade: 12, subject: "Chemistry", chapterName: "Coordination Compounds", difficulty: "MEDIUM",
+   530→    text: "The coordination number of cobalt in [Co(NH₃)₄Cl₂]⁺ is:",
+   531→    options: ["A) 4", "B) 5", "C) 6", "D) 7"], answer: "C) 6",
+   532→    explanation: "Four NH₃ plus two Cl⁻ ligands bind to Co, giving coordination number 6 (octahedral).", },
+   533→  { grade: 12, subject: "Chemistry", chapterName: "Alcohols, Phenols and Ethers", difficulty: "EASY",
+   534→    text: "Phenol is more acidic than ethanol because:",
+   535→    options: ["A) It has more carbon atoms", "B) The phenoxide ion is resonance stabilised", "C) It contains two oxygen atoms", "D) Ethanol is aromatic"], answer: "B) The phenoxide ion is resonance stabilised",
+   536→    explanation: "The negative charge of phenoxide delocalises into the aromatic ring, stabilising it far more than ethoxide.", },
+   537→  { grade: 11, subject: "Maths", chapterName: "Sets", difficulty: "EASY",
+   538→    text: "If A = {1, 2, 3}, how many subsets does A have?",
+   539→    options: ["A) 6", "B) 7", "C) 8", "D) 9"], answer: "C) 8",
+   540→    explanation: "A set with n elements has 2ⁿ subsets: 2³ = 8 (including ∅ and A itself).", },
+   541→  { grade: 11, subject: "Maths", chapterName: "Trigonometric Functions", difficulty: "MEDIUM",
+   542→    text: "The value of sin²30° + cos²30° is:",
+   543→    options: ["A) 1/2", "B) 1", "C) 3/4", "D) 0"], answer: "B) 1",
+   544→    explanation: "sin²θ + cos²θ = 1 for every θ — the identity holds regardless of the angle.", },
+   545→  { grade: 11, subject: "Maths", chapterName: "Permutations and Combinations", difficulty: "MEDIUM",
+   546→    text: "In how many ways can 4 students be seated in a row of 4 chairs?",
+   547→    options: ["A) 12", "B) 16", "C) 24", "D) 8"], answer: "C) 24",
+   548→    explanation: "Arrangements = 4! = 4×3×2×1 = 24.", },
+   549→  { grade: 11, subject: "Maths", chapterName: "Limits and Derivatives", difficulty: "HARD",
+   550→    text: "The derivative of sin 2x with respect to x is:",
+   551→    options: ["A) cos 2x", "B) 2cos 2x", "C) −2cos 2x", "D) 2sin 2x"], answer: "B) 2cos 2x",
+   552→    explanation: "Chain rule: d/dx[sin(2x)] = cos(2x) × d/dx(2x) = 2cos 2x.", },
+   553→  { grade: 11, subject: "Physics", chapterName: "Laws of Motion", difficulty: "MEDIUM",
+   554→    text: "Newton's third law explains:",
+   555→    options: ["A) Why a gun recoils when fired", "B) Why planets orbit the sun", "C) Why satellites stay in orbit", "D) Why bodies float"], answer: "A) Why a gun recoils when fired",
+   556→    explanation: "The bullet's forward momentum produces an equal backward push on the gun — action-reaction pair.", },
+   557→  { grade: 11, subject: "Physics", chapterName: "Work, Energy and Power", difficulty: "MEDIUM",
+   558→    text: "A force does zero work on a moving body when the angle between force and displacement is:",
+   559→    options: ["A) 0°", "B) 45°", "C) 90°", "D) 180°"], answer: "C) 90°",
+   560→    explanation: "W = Fs cosθ; at θ = 90°, cosθ = 0, so no work is done (e.g. centripetal force in circular motion).", },
+   561→  { grade: 11, subject: "Physics", chapterName: "Units and Measurements", difficulty: "EASY",
+   562→    text: "Which of the following is a dimensionless quantity?",
+   563→    options: ["A) Strain", "B) Stress", "C) Pressure", "D) Force"], answer: "A) Strain",
+   564→    explanation: "Strain = change/original (same units cancel), so it has no dimensions; stress and pressure are N/m².", },
+   565→  { grade: 11, subject: "Biology", chapterName: "Cell: The Unit of Life", difficulty: "EASY",
+   566→    text: "Which organelle is called the 'suicidal bag' of the cell?",
+   567→    options: ["A) Ribosome", "B) Lysosome", "C) Mitochondria", "D) Golgi body"], answer: "B) Lysosome",
+   568→    explanation: "Lysosomes hold digestive enzymes that can break down the cell itself if the membrane ruptures.", },
+   569→  { grade: 11, subject: "Biology", chapterName: "Photosynthesis in Higher Plants", difficulty: "MEDIUM",
+   570→    text: "The primary CO₂ acceptor in the C4 pathway is:",
+   571→    options: ["A) RuBP", "B) PEP", "C) OAA", "D) PGA"], answer: "B) PEP",
+   572→    explanation: "Phosphoenolpyruvate (PEP) fixes CO₂ in mesophyll cells forming OAA; RuBP is the C3 acceptor.", },
+   573→  { grade: 12, subject: "Biology", chapterName: "Molecular Basis of Inheritance", difficulty: "MEDIUM",
+   574→    text: "In a DNA double helix, one complete turn covers a distance of about:",
+   575→    options: ["A) 0.34 nm", "B) 3.4 nm", "C) 20 nm", "D) 2 nm"], answer: "B) 3.4 nm",
+   576→    explanation: "One turn = 10 base pairs × 0.34 nm rise per pair ≈ 3.4 nm; 2 nm is the helix diameter.", },
+   577→  { grade: 12, subject: "Biology", chapterName: "Human Health and Disease", difficulty: "EASY",
+   578→    text: "Malaria is transmitted by the bite of:",
+   579→    options: ["A) Culex mosquito", "B) Female Anopheles mosquito", "C) Aedes mosquito", "D) Housefly"], answer: "B) Female Anopheles mosquito",
+   580→    explanation: "Female Anopheles carries Plasmodium; Aedes spreads dengue and chikungunya.", },
+   581→];
+   582→
+   583→const SUBJECT_FIX: Record<string, string> = { "social-science": "Social Science" };
+   584→
+   585→async function main() {
+   586→  console.log("Seeding StudySetu data…");
+   587→
+   588→  // boards
+   589→  const boards: Record<string, string> = {};
+   590→  for (const b of BOARDS) {
+   591→    const row = await db.board.upsert({ where: { code: b.code }, create: b, update: b });
+   592→    boards[b.code] = row.id;
+   593→  }
+   594→
+   595→  // classes + subjects + chapters
+   596→  const subjectIds: Record<string, string> = {}; // `${grade}-${slug}` -> id
+   597→  const chapterIds: Record<string, { id: string; name: string }> = {}; // `${grade}-${slug}-${num}` -> id
+   598→  for (const grade of [9, 10, 11, 12]) {
+   599→    const cls = await db.classLevel.upsert({
+   600→      where: { grade },
+   601→      create: { grade, label: `Class ${grade}` },
+   602→      update: { label: `Class ${grade}` },
+   603→    });
+   604→    for (const sub of CURRICULUM[grade]) {
+   605→      const s = await db.subject.upsert({
+   606→        where: { classId_slug: { classId: cls.id, slug: sub.slug } },
+   607→        create: { name: sub.name, slug: sub.slug, classId: cls.id },
+   608→        update: {},
+   609→      });
+   610→      subjectIds[`${grade}-${sub.slug}`] = s.id;
+   611→      let num = 1;
+   612→      for (const chName of sub.chapters) {
+   613→        const ch = await db.chapter.upsert({
+   614→          where: { subjectId_number: { subjectId: s.id, number: num } },
+   615→          create: { number: num, name: chName, subjectId: s.id },
+   616→          update: { name: chName },
+   617→        });
+   618→        chapterIds[`${grade}-${sub.slug}-${num}`] = { id: ch.id, name: chName };
+   619→        num++;
+   620→      }
+   621→    }
+   622→  }
+   623→
+   624→  // original seed notes
+   625→  let noteCount = 0;
+   626→  for (const [key, content] of Object.entries(SEED_NOTES)) {
+   627→    const [grade, slug, num] = key.split("-");
+   628→    const ch = chapterIds[`${grade}-${slug}-${num}`];
+   629→    if (!ch) continue;
+   630→    const keyPoints: string[] = [];
+   631→    const revMatch = content.match(/## Quick Revision[\s\S]*?(?=\n## |$)/);
+   632→    if (revMatch) {
+   633→      keyPoints.push(...revMatch[0].split("\n").filter((l) => l.trim().startsWith("-")).map((l) => l.replace(/^[\s\-]+/, "").trim()).slice(0, 8));
+   634→    }
+   635→    const titleMatch = content.match(/^# (.+)$/m);
+   636→    const words = content.split(/\s+/).length;
+   637→    await db.note.upsert({
+   638→      where: { chapterId: ch.id },
+   639→      create: { title: titleMatch ? titleMatch[1] : `${ch.name} — Revision Notes`, content, keyPoints: JSON.stringify(keyPoints), readMins: Math.max(4, Math.round(words / 130)), chapterId: ch.id, origin: "original-seed" },
+   640→      update: {},
+   641→    });
+   642→    noteCount++;
+   643→  }
+   644→
+   645→  // original seed questions
+   646→  let qCount = 0;
+   647→  for (const q of SEED_QUESTIONS) {
+   648→    const sid = subjectIds[`${q.grade}-${q.subject.toLowerCase().replace(/\s+/g, "-")}`];
+   649→    if (!sid) continue;
+   650→    const exists = await db.question.findFirst({ where: { text: q.text, subjectId: sid } });
+   651→    if (exists) continue;
+   652→    await db.question.create({
+   653→      data: {
+   654→        text: q.text, options: JSON.stringify(q.options), answer: q.answer, explanation: q.explanation,
+   655→        difficulty: q.difficulty, marks: 1, subjectId: sid, chapterName: q.chapterName, origin: "original-seed",
+   656→      },
+   657→    });
+   658→    qCount++;
+   659→  }
+   660→
+   661→  // PYQ paper metadata with OFFICIAL board links only
+   662→  const years = [2021, 2022, 2023, 2024, 2025];
+   663→  const officialMap: Record<string, string> = {
+   664→    CBSE: "https://cbse.gov.in/cbsenew/question-paper.html",
+   665→    HBSE: "https://bseh.org.in/home?page=question-papers",
+   666→    BSEB: "https://biharboardonline.bihar.gov.in",
+   667→    KERALA: "https://dhsekerala.gov.in",
+   668→  };
+   669→  let paperCount = 0;
+   670→  for (const b of BOARDS) {
+   671→    for (const grade of [9, 10, 11, 12]) {
+   672→      for (const sub of CURRICULUM[grade]) {
+   673→        const sid = subjectIds[`${grade}-${sub.slug}`];
+   674→        const gradeLabel = SUBJECT_FIX[sub.slug] || sub.name;
+   675→        for (const y of years) {
+   676→          await db.paper.upsert({
+   677→            where: { boardId_classId_subjectId_year_kind: { boardId: boards[b.code], classId: (await db.classLevel.findUnique({ where: { grade } }))!.id, subjectId: sid, year: y, kind: "PYQ" } },
+   678→            create: {
+   679→              title: `${b.name} Class ${grade} ${gradeLabel} Question Paper ${y}`,
+   680→              year: y, kind: "PYQ", officialUrl: officialMap[b.code],
+   681→              note: "Open the official board portal to download the original paper. Use our original practice sets to test yourself.",
+   682→              boardId: boards[b.code], classId: (await db.classLevel.findUnique({ where: { grade } }))!.id, subjectId: sid,
+   683→            },
+   684→            update: {},
+   685→          }).catch(() => {});
+   686→          paperCount++;
+   687→        }
+   688→      }
+   689→    }
+   690→    // CBSE official sample papers (2025) — linked, not stored
+   691→    for (const grade of [10, 12]) {
+   692→      for (const sub of CURRICULUM[grade]) {
+   693→        const sid = subjectIds[`${grade}-${sub.slug}`];
+   694→        const clsId = (await db.classLevel.findUnique({ where: { grade } }))!.id;
+   695→        await db.paper.upsert({
+   696→          where: { boardId_classId_subjectId_year_kind: { boardId: boards.CBSE, classId: clsId, subjectId: sid, year: 2025, kind: "SAMPLE" } },
+   697→          create: {
+   698→            title: `CBSE Class ${grade} ${SUBJECT_FIX[sub.slug] || sub.name} Official Sample Paper 2025-26`,
+   699→            year: 2025, kind: "SAMPLE", officialUrl: "https://cbseacademic.nic.in/SQP_CLASSX_2025-26.html",
+   700→            note: "Official sample paper & marking scheme published by CBSE Academic — always free and legal to download there.",
+   701→            boardId: boards.CBSE, classId: clsId, subjectId: sid,
+   702→          },
+   703→          update: {},
+   704→        }).catch(() => {});
+   705→      }
+   706→    }
+   707→  }
+   708→
+   709→  // question of the day
+   710→  const anyQ = await db.question.findFirst();
+   711→  if (anyQ) {
+   712→    await db.siteStat.upsert({ where: { key: "qotd" }, create: { key: "qotd", value: anyQ.id }, update: {} });
+   713→  }
+   714→
+   715→  const totals = {
+   716→    boards: await db.board.count(),
+   717→    chapters: await db.chapter.count(),
+   718→    notes: await db.note.count(),
+   719→    questions: await db.question.count(),
+   720→    papers: await db.paper.count(),
+   721→  };
+   722→  console.log(`Seeded: +${noteCount} notes, +${qCount} questions, ${paperCount} paper entries`, totals);
+   723→}
+   724→
+   725→main().catch((e) => { console.error(e); process.exit(1); }).finally(() => db.$disconnect());
+   726→

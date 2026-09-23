@@ -6,11 +6,12 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { useState } from "react";
 import type { ViewKey } from "@/config/site";
 
-const NAV: Array<{ key: ViewKey; label: string }> = [
+const NAV: Array<{ key: ViewKey | "schools"; label: string; anchor?: string }> = [
   { key: "home", label: "Home" },
   { key: "study", label: "Study Material" },
   { key: "pyq", label: "PYQs" },
   { key: "practice", label: "Practice" },
+  { key: "schools", label: "Schools", anchor: "#schools" },
   { key: "about", label: "About" },
 ];
 
@@ -25,6 +26,20 @@ function NavButtons({
   onPick?: () => void;
   className?: string;
 }) {
+  const go = (item: (typeof NAV)[number]) => {
+    if (item.anchor) {
+      // jump home first (section lives on the homepage), then smooth-scroll
+      onNavigate("home");
+      setTimeout(() => {
+        document.querySelector(item.anchor!)?.
+          scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    } else {
+      onNavigate(item.key as ViewKey);
+    }
+    onPick?.();
+  };
+
   return (
     <>
       {NAV.map((item) => (
@@ -38,10 +53,8 @@ function NavButtons({
               ? " bg-emerald-600 hover:bg-emerald-700 text-white"
               : " text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400")
           }
-          onClick={() => {
-            onNavigate(item.key);
-            onPick?.();
-          }}
+          onClick={() => go(item)}
+          aria-label={item.anchor ? `${item.label} schools we cover` : item.label}
         >
           {item.label}
         </Button>
