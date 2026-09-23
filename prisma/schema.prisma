@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Educational board (CBSE, HBSE, BSEB, Kerala DHSE)
+model Board {
+  id        String  @id @default(cuid())
+  code      String  @unique // CBSE | HBSE | BSEB | KERALA
+  name      String
+  fullName  String
+  region    String // e.g. "Delhi / Noida (UP)", "Haryana", "Kerala", "Bihar"
+  website   String? // official website (safe to link)
+  papers    Paper[]
+}
+
+// Class level 9-12
+model ClassLevel {
+  id       String   @id @default(cuid())
+  grade    Int      @unique // 9 | 10 | 11 | 12
+  label    String
+  subjects Subject[]
+  papers   Paper[]
+}
+
+// Subject inside a class
+model Subject {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  classId   String
+  class     ClassLevel @relation(fields: [classId], references: [id], onDelete: Cascade)
+  chapters  Chapter[]
+  questions Question[]
+  papers    Paper[]
+
+  @@unique([classId, slug])
+}
+
+// Chapter inside a subject
+model Chapter {
+  id        String   @id @default(cuid())
+  number    Int
+  name      String
+  summary   String?
+  subjectId String
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  note      Note?
+
+  @@unique([subjectId, number])
+}
+
+// Original (copyright-safe) study note for a chapter, stored as Markdown
+model Note {
+  id         String   @id @default(cuid())
+  title      String
+  content    String // markdown, original wording
+  keyPoints  String? // JSON string array
+  readMins   Int      @default(6)
+  origin     String   @default("original-ai") // provenance marker
+  version    Int      @default(1)
+  chapterId  String   @unique
+  chapter    Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+// Previous-year paper METADATA + link to official board source (no copyrighted files stored)
+model Paper {
+  id          String   @id @default(cuid())
+  title       String
+  year        Int
+  kind        String   @default("PYQ") // PYQ | SAMPLE | MODEL_SET
+  officialUrl String? // official board page link
+  note        String? // small editorial note (original text)
+  boardId     String
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  classId     String
+  class       ClassLevel @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjectId   String
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@unique([boardId, classId, subjectId, year, kind])
+}
+
+// Original practice question (never copied from books/papers)
+model Question {
+  id          String   @id @default(cuid())
+  text        String
+  options     String? // JSON string array (for MCQ)
+  answer      String
+  explanation String?
+  type        String   @default("MCQ") // MCQ | SHORT | LONG
+  difficulty  String   @default("MEDIUM") // EASY | MEDIUM | HARD
+  marks       Int      @default(1)
+  subjectId   String
+  subject     Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  chapterName String? // loose tag, flexible for AI-generated items
+  boardTag    String?
+  yearTag     Int?
+  origin      String   @default("original-ai")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Automation log — daily AI content refresh job
+model GenLog {
+  id           String   @id @default(cuid())
+  jobName      String // daily-refresh | catch-up | manual
+  status       String // success | failed | partial
+  notesCreated Int      @default(0)
+  questionsCreated Int  @default(0)
+  detail       String?
+  ranAt        DateTime @default(now())
+}
+
+// Key-value store (question-of-the-day pointer, counters, etc.)
+model SiteStat {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
