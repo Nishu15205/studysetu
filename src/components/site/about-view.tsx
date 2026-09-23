@@ -38,8 +38,8 @@ export function AboutView() {
 
   const load = () =>
     fetch("/api/automation")
-      .then((r) => r.json())
-      .then((d: AutomationDto) => setAuto(d))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: AutomationDto | null) => d && setAuto(d))
       .catch(() => {});
 
   useEffect(() => {
@@ -50,6 +50,7 @@ export function AboutView() {
     setRunning(true);
     try {
       const r = await fetch("/api/cron/daily?force=1&trigger=manual", { method: "POST" });
+      if (!r.ok) throw new Error("cron failed");
       const d = await r.json();
       toast({
         title: d.skipped ? "Already up to date today" : d.ok ? "Update complete!" : "Update ran with issues",

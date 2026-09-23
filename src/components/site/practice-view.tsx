@@ -42,8 +42,8 @@ export function PracticeView({ initialGrade }: Props) {
 
   useEffect(() => {
     fetch("/api/structure")
-      .then((r) => r.json())
-      .then((d: StructureDto) => setStructure(d))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: StructureDto | null) => d && setStructure(d))
       .catch(() => {});
   }, []);
 

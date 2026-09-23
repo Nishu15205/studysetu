@@ -61,8 +61,8 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
     setChapterId(null);
     setNote(null);
     fetch(`/api/subjects?grade=${grade}`)
-      .then((r) => r.json())
-      .then((d: SubjectsDto) => alive && setData(d))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: SubjectsDto | null) => alive && d && setData(d))
       .catch(() => alive && toast({ title: "Failed to load subjects", variant: "destructive" }));
     return () => {
       alive = false;
@@ -77,8 +77,8 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
       setNoteLoading(true);
       try {
         const r = await fetch(`/api/notes?chapterId=${chId}`);
-        const d: NoteResponseDto = await r.json();
-        setNote(d);
+        const d: NoteResponseDto | null = r.ok ? await r.json() : null;
+        setNote(d && d.note && d.chapter ? d : null);
       } catch {
         if (!silent) toast({ title: "Could not load note", variant: "destructive" });
       } finally {
@@ -127,8 +127,8 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
     setSearching(true);
     const t = setTimeout(() => {
       fetch(`/api/search?q=${encodeURIComponent(search.trim())}`)
-        .then((r) => r.json())
-        .then((d: SearchResultsDto) => setSearchResults(d))
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d: SearchResultsDto | null) => setSearchResults(d && Array.isArray(d.results) ? d : null))
         .catch(() => {})
         .finally(() => setSearching(false));
     }, 400);

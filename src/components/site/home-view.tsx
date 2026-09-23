@@ -48,12 +48,12 @@ export function HomeView({
   useEffect(() => {
     let alive = true;
     fetch("/api/stats")
-      .then((r) => r.json())
-      .then((d: StatsDto) => alive && setStats(d))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: StatsDto | null) => alive && d && setStats(d))
       .catch(() => toast({ title: "Could not load stats", variant: "destructive" }));
     fetch("/api/structure")
-      .then((r) => r.json())
-      .then((d) => alive && setStructure(d.classes ?? []))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { classes?: ClassDto[] } | null) => alive && d && setStructure(d.classes ?? []))
       .catch(() => {});
     return () => {
       alive = false;
@@ -101,10 +101,10 @@ export function HomeView({
               {/* live counters */}
               <div className="mt-7 grid grid-cols-4 max-w-md gap-2">
                 {[
-                  { icon: BookOpenCheck, label: "Notes", val: stats?.totals.notes },
-                  { icon: ListChecks, label: "Questions", val: stats?.totals.questions },
-                  { icon: FileText, label: "Papers", val: stats?.totals.papers },
-                  { icon: LibraryBig, label: "Chapters", val: stats?.totals.chapters },
+                  { icon: BookOpenCheck, label: "Notes", val: stats?.totals?.notes },
+                  { icon: ListChecks, label: "Questions", val: stats?.totals?.questions },
+                  { icon: FileText, label: "Papers", val: stats?.totals?.papers },
+                  { icon: LibraryBig, label: "Chapters", val: stats?.totals?.chapters },
                 ].map((s) => (
                   <div key={s.label} className="rounded-xl bg-white/70 dark:bg-stone-900/60 border border-stone-200/70 dark:border-stone-800 px-2.5 py-2 text-center">
                     <s.icon className="h-4 w-4 mx-auto text-emerald-600 dark:text-emerald-400" aria-hidden />

@@ -31,8 +31,8 @@ export function PyqView({ onNavigate }: { onNavigate: (v: ViewKey, opts?: { grad
 
   useEffect(() => {
     fetch("/api/structure")
-      .then((r) => r.json())
-      .then((d: StructureDto) => setStructure(d))
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: StructureDto | null) => d && setStructure(d))
       .catch(() => {});
   }, []);
 
@@ -40,9 +40,9 @@ export function PyqView({ onNavigate }: { onNavigate: (v: ViewKey, opts?: { grad
     let alive = true;
     const url = `/api/papers?board=${board}${grade ? `&grade=${grade}` : ""}`;
     fetch(url)
-      .then((r) => r.json())
+      .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
-        if (alive) setPapers(d.ok ? d.papers : []);
+        if (alive) setPapers(d?.ok ? d.papers : []);
       })
       .catch(() => alive && toast({ title: "Failed to load papers", variant: "destructive" }))
       .finally(() => alive && setLoading(false));
