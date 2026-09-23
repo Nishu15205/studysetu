@@ -3,7 +3,7 @@ export const SITE = {
   tagline: "Free Study Material & PYQs for Class 9-12",
   description:
     "Free original study notes, previous year question paper guides and daily practice questions for Class 9-12 students of CBSE (Delhi/Noida), HBSE Haryana, BSEB Bihar and Kerala boards. Updated automatically every day.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://studysetu.example.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://studysetu.vercel.app",
   contactEmail: "hello@studysetu.example.com",
   // Google AdSense — put your publisher id here (e.g. "ca-pub-1234567890123456")
   // or set NEXT_PUBLIC_ADSENSE_CLIENT_ID env var. Leave empty to hide ads.

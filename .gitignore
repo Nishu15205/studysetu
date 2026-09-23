@@ -52,8 +52,7 @@ prompt
 server.log
 # Skills directory
 /skills/
-# local database
-db/*.db
+# local database (journal only — custom.db IS committed as seed data for serverless)
 db/*.db-journal
 
 # internal agent artifacts
