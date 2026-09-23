@@ -254,7 +254,7 @@ export const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "How often is new content added?",
-    a: "Automatically every single day at 03:05 AM IST. New chapter notes, fresh MCQ sets and a new Daily Challenge question appear on their own — the site updates itself, so content never goes stale.",
+    a: "The complete syllabus is already covered — every chapter of every subject has its own revision note, and every subject has an original practice set. A new Daily Challenge question appears every day, and we keep expanding notes and question banks with each new syllabus update, all without you having to do anything.",
   },
   {
     q: "Can I rely on these notes for CBSE Class 10 and Class 12 board exams?",
@@ -275,7 +275,7 @@ export function buildJsonLd(): string {
     url: SITE.url,
     logo: `${SITE.url}/logo.svg`,
     description:
-      "Free original study notes, previous year question paper guides and daily MCQ practice for Class 9-12 students of CBSE schools in Noida, Greater Noida and Delhi, HBSE Haryana, BSEB Bihar and Kerala DHSE/SCERT boards. Content updates automatically every day.",
+      "Free original study notes, previous year question paper guides and daily MCQ practice for Class 9-12 students of CBSE schools in Noida, Greater Noida and Delhi, HBSE Haryana, BSEB Bihar and Kerala DHSE/SCERT boards. No login needed — 100% free forever.",
     areaServed: [
       { "@type": "City", name: "Noida" },
       { "@type": "City", name: "Greater Noida" },

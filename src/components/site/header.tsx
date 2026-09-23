@@ -106,7 +106,7 @@ export function SiteHeader({ view, onNavigate }: { view: ViewKey; onNavigate: (v
                 <NavButtons view={view} onNavigate={onNavigate} onPick={() => setOpen(false)} className="justify-start" />
                 <div className="mt-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 p-3 text-xs text-emerald-800 dark:text-emerald-300 flex items-start gap-2">
                   <Sparkles className="h-4 w-4 mt-0.5 shrink-0" aria-hidden />
-                  <span>Content refreshes automatically every day at 3:05 AM.</span>
+                  <span>No sign-up needed — every note and question is free forever.</span>
                 </div>
               </div>
             </SheetContent>

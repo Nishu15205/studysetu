@@ -71,7 +71,7 @@ export function HomeView({
           <div>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <Badge className="mb-4 bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border-0 hover:bg-emerald-100">
-                <Sparkles className="h-3 w-3 mr-1" aria-hidden /> Updated daily · automatically
+                <Sparkles className="h-3 w-3 mr-1" aria-hidden /> No login · 100% free · always
               </Badge>
               <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-stone-900 dark:text-stone-50 leading-tight">
                 Free Study Notes & PYQs for{" "}
@@ -79,7 +79,7 @@ export function HomeView({
               </h1>
               <p className="mt-4 text-stone-600 dark:text-stone-300 text-base md:text-lg leading-relaxed">
                 Original, easy-to-revise notes and fresh practice questions for CBSE (Delhi · Noida), HBSE Haryana,
-                BSEB Bihar and Kerala board students. Every day, new content appears on its own — you just study.
+                BSEB Bihar and Kerala board students. Complete chapter coverage — just open and start studying.
               </p>
               <div className="mt-6 flex flex-wrap gap-2.5">
                 <Button
@@ -192,7 +192,7 @@ export function HomeView({
               <Trophy className="h-5 w-5 text-amber-500" aria-hidden />
               Daily Challenge
               <Badge variant="secondary" className="ml-auto bg-emerald-600/10 text-emerald-700 dark:text-emerald-400 border-0 text-[10px]">
-                <RefreshCcw className="h-3 w-3 mr-1" aria-hidden /> changes every day
+                <RefreshCcw className="h-3 w-3 mr-1" aria-hidden /> new Daily Challenge every day
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -286,9 +286,9 @@ export function HomeView({
       {/* Latest additions */}
       <section aria-label="Latest updates">
         <div className="mb-4 flex items-center gap-2">
-          <h2 className="text-xl md:text-2xl font-bold text-stone-900 dark:text-stone-50">Fresh This Week</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-stone-900 dark:text-stone-50">Featured Notes &amp; Questions</h2>
           <Badge variant="secondary" className="bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300 border-0 text-[10px]">
-            auto-added
+            handpicked
           </Badge>
         </div>
         <div className="grid md:grid-cols-2 gap-3 md:gap-4">
@@ -348,9 +348,9 @@ export function HomeView({
               body: "Every note and question is written in original words by our AI study engine — we never copy NCERT text, guides or board papers. PYQs link straight to official board sites.",
             },
             {
-              icon: RefreshCcw,
-              title: "Zero-maintenance freshness",
-              body: "An automated engine adds new notes and practice sets every night at 03:05 IST. What you see is always up to date — no waiting, no stale content.",
+              icon: BadgeCheck,
+              title: "Latest syllabus aligned",
+              body: "Notes follow the current NCERT syllabus chapter-by-chapter for Classes 9-12, with the topics and marks-weightage patterns that CBSE, HBSE, BSEB and Kerala board exams actually test.",
             },
             {
               icon: Timer,

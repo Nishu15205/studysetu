@@ -7,8 +7,8 @@ import {
   ChevronRight,
   Clock,
   FileText,
+  Hourglass,
   ListChecks,
-  Loader2,
   Search,
   Sparkles,
   X,
@@ -39,7 +39,6 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
   const [chapterId, setChapterId] = useState<string | null>(null);
   const [note, setNote] = useState<NoteResponseDto | null>(null);
   const [noteLoading, setNoteLoading] = useState(false);
-  const [generating, setGenerating] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResultsDto | null>(null);
   const [searching, setSearching] = useState(false);
@@ -94,29 +93,6 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
     setChapterId(null);
     setNote(null);
   }, [subjectId]);
-
-  const generateFor = async (chId: string) => {
-    setGenerating(chId);
-    try {
-      const r = await fetch("/api/notes/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chapterId: chId }),
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.error || "Generation failed");
-      toast({ title: "Note ready!", description: "Fresh original note generated just for you." });
-      await loadNote(chId);
-    } catch (e) {
-      toast({
-        title: "Generation failed",
-        description: e instanceof Error ? e.message : "Please try again",
-        variant: "destructive",
-      });
-    } finally {
-      setGenerating(null);
-    }
-  };
 
   // debounced search
   useEffect(() => {
@@ -296,7 +272,11 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
                         >
                           <div className="flex items-center justify-between gap-2">
                             <button
-                              onClick={() => (c.hasNote ? loadNote(c.id) : toast({ title: "No note yet", description: "Tap 'Generate with AI' to create one now." }))}
+                              onClick={() =>
+                                c.hasNote
+                                  ? loadNote(c.id)
+                                  : toast({ title: "Coming soon", description: "This chapter's note is being prepared and will appear here shortly." })
+                              }
                               className="flex items-center gap-2.5 text-left flex-1 min-w-0"
                             >
                               <span
@@ -318,20 +298,9 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
                                 <Clock className="h-3 w-3" aria-hidden /> {c.readMins}m
                               </span>
                             ) : (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-7 shrink-0 rounded-full text-[11px] px-2.5 border-amber-300 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40"
-                                disabled={generating === c.id}
-                                onClick={() => generateFor(c.id)}
-                              >
-                                {generating === c.id ? (
-                                  <Loader2 className="h-3 w-3 mr-1 animate-spin" aria-hidden />
-                                ) : (
-                                  <Sparkles className="h-3 w-3 mr-1" aria-hidden />
-                                )}
-                                {generating === c.id ? "Writing…" : "Generate"}
-                              </Button>
+                              <span className="shrink-0 text-[10px] text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                                <Hourglass className="h-3 w-3" aria-hidden /> soon
+                              </span>
                             )}
                           </div>
                         </div>
@@ -385,20 +354,11 @@ export function StudyView({ initialGrade, initialQuery, onNavigate }: Props) {
               <CardContent className="p-8 text-center flex flex-col items-center gap-3">
                 <FileText className="h-10 w-10 text-stone-300" aria-hidden />
                 <p className="text-sm text-stone-500 dark:text-stone-400 max-w-sm">
-                  A note for <span className="font-medium text-stone-700 dark:text-stone-200">{note.chapter.name}</span> is on
-                  the way — our daily engine will write it automatically at 03:05 AM. Can’t wait?
+                  The note for <span className="font-medium text-stone-700 dark:text-stone-200">{note.chapter.name}</span> is
+                  being prepared. Meanwhile, explore another chapter or try practice questions.
                 </p>
-                <Button
-                  className="bg-amber-500 hover:bg-amber-600 text-white"
-                  onClick={() => generateFor(note.chapter.id)}
-                  disabled={generating === note.chapter.id}
-                >
-                  {generating === note.chapter.id ? (
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden />
-                  ) : (
-                    <Sparkles className="h-4 w-4 mr-2" aria-hidden />
-                  )}
-                  Generate with AI now
+                <Button variant="outline" onClick={() => onNavigate("practice")}>
+                  <ListChecks className="h-4 w-4 mr-2" aria-hidden /> Practice questions
                 </Button>
               </CardContent>
             ) : (

@@ -86,7 +86,7 @@ export default function Page() {
           <p>
             Free chapter-wise original revision notes, PYQ guides and MCQ practice for students of CBSE schools in
             Noida, Greater Noida and Delhi, CBSE and HBSE schools in Haryana, CBSE and BSEB schools in Bihar, and
-            CBSE / DHSE Kerala schools. Based on the NCERT syllabus. Updated automatically every day.
+            CBSE / DHSE Kerala schools. Based on the NCERT syllabus. No login or sign-up required — completely free.
           </p>
           <ul>
             <li><a href="/#classes">Class 9, 10, 11 &amp; 12 study material</a></li>

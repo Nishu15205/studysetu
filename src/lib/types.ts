@@ -120,7 +120,6 @@ export type StatsDto = {
     subject: string;
     grade: number;
   } | null;
-  lastUpdate: { jobName: string; status: string; notesCreated: number; questionsCreated: number; detail: string | null; ranAt: string } | null;
   error?: string;
 };
 
@@ -136,22 +135,4 @@ export type SearchResultsDto = {
     hasNote?: boolean;
   }>;
   message?: string;
-};
-
-export type AutomationDto = {
-  ok: boolean;
-  schedule: string;
-  ranToday: boolean;
-  nextRun: string | null;
-  coverage: { chaptersWithNotes: number; totalChapters: number };
-  logs: Array<{
-    id: string;
-    jobName: string;
-    status: string;
-    notesCreated: number;
-    questionsCreated: number;
-    detail: string | null;
-    ranAt: string;
-  }>;
-  error?: string;
 };

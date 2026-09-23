@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 const TITLE = "StudySetu — Free Class 9-12 Notes, PYQs & Practice | CBSE, HBSE, BSEB & Kerala Board";
 
 const DESCRIPTION =
-  "Free original study notes, previous year question paper (PYQ) guides and daily MCQ practice for Class 9-12 students of CBSE schools in Noida & Delhi (DPS, Amity, Lotus Valley, Apeejay…), CBSE/HBSE Haryana, CBSE/BSEB Bihar and Kerala DHSE board. Chapter-wise NCERT-based notes, updated automatically every day.";
+  "Free original study notes, previous year question paper (PYQ) guides and MCQ practice for Class 9-12 students of CBSE schools in Noida & Delhi (DPS, Amity, Lotus Valley, Apeejay…), CBSE/HBSE Haryana, CBSE/BSEB Bihar and Kerala DHSE board. Complete NCERT-based chapter coverage — no login, no sign-up, 100% free.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),

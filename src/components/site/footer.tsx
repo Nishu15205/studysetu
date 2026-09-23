@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GraduationCap, ShieldCheck, RefreshCcw } from "lucide-react";
+import { GraduationCap, ShieldCheck } from "lucide-react";
 import type { ViewKey } from "@/config/site";
 import { SITE } from "@/config/site";
 
@@ -100,13 +100,30 @@ export function SiteFooter({ onNavigate }: { onNavigate: (v: ViewKey) => void })
 
           <div>
             <h3 className="text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-2">
-              Always Fresh
+              Policies &amp; Info
             </h3>
-            <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed flex items-start gap-1.5">
-              <RefreshCcw className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600" aria-hidden />
-              New notes and practice questions are generated automatically every day at 03:05 AM IST — no manual
-              updates needed.
-            </p>
+            <ul className="space-y-1.5 text-sm">
+              <li>
+                <Link href="/privacy-policy" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms-of-service" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/disclaimer" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-stone-600 dark:text-stone-300 hover:text-emerald-700 dark:hover:text-emerald-400 transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 

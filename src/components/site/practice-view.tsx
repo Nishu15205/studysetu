@@ -8,7 +8,6 @@ import {
   ListChecks,
   Loader2,
   RotateCcw,
-  Sparkles,
   Trophy,
   XCircle,
 } from "lucide-react";
@@ -33,7 +32,6 @@ export function PracticeView({ initialGrade }: Props) {
   const [questions, setQuestions] = useState<QuizQuestionDto[]>([]);
   const [available, setAvailable] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [generating, setGenerating] = useState(false);
   const [idx, setIdx] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const [score, setScore] = useState(0);
@@ -58,11 +56,10 @@ export function PracticeView({ initialGrade }: Props) {
       if (!d.ok) throw new Error(d.error);
       setAvailable(d.available ?? d.questions.length);
       if (d.questions.length === 0) {
-        // offer AI generation
         setSubjectId(subId);
         toast({
-          title: "No questions yet for this subject",
-          description: "Tap “Generate fresh set with AI” below — it takes a few seconds.",
+          title: "Questions coming soon",
+          description: "Our question bank for this subject is being prepared. Try another subject meanwhile.",
         });
         setLoading(false);
         return;
@@ -77,30 +74,6 @@ export function PracticeView({ initialGrade }: Props) {
       toast({ title: "Could not load questions", variant: "destructive" });
     } finally {
       setLoading(false);
-    }
-  };
-
-  const generateAndStart = async () => {
-    if (!subjectId) return;
-    setGenerating(true);
-    try {
-      const r = await fetch("/api/questions/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subjectId, count: 10 }),
-      });
-      const d = await r.json();
-      if (!d.ok) throw new Error(d.error);
-      toast({ title: `+${d.created} fresh questions added!`, description: "Original set, ready to practice." });
-      await startQuiz(subjectId);
-    } catch (e) {
-      toast({
-        title: "Generation failed",
-        description: e instanceof Error ? e.message : "Try again",
-        variant: "destructive",
-      });
-    } finally {
-      setGenerating(false);
     }
   };
 
@@ -139,7 +112,7 @@ export function PracticeView({ initialGrade }: Props) {
           <ListChecks className="h-6 w-6 text-emerald-600" aria-hidden /> Practice Zone
         </h1>
         <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">
-          Instant-check MCQs with explanations. New questions are added automatically every night.
+          Instant-check MCQs with explanations. Every question is originally written for this syllabus.
         </p>
       </div>
 
@@ -206,15 +179,11 @@ export function PracticeView({ initialGrade }: Props) {
             {subjectId && available === 0 && !loading && (
               <Card className="border-amber-300 dark:border-amber-800">
                 <CardContent className="p-5 text-center flex flex-col items-center gap-2.5">
-                  <Sparkles className="h-7 w-7 text-amber-500" aria-hidden />
+                  <ListChecks className="h-7 w-7 text-amber-500" aria-hidden />
                   <p className="text-sm text-stone-600 dark:text-stone-300 max-w-md">
-                    No practice questions for <span className="font-semibold">{subjectName}</span> yet. Our daily engine
-                    will add some automatically — or generate a fresh original set right now.
+                    Practice questions for <span className="font-semibold">{subjectName}</span> are being prepared and
+                    will appear here soon. Try another subject meanwhile — there are plenty to choose from.
                   </p>
-                  <Button className="bg-amber-500 hover:bg-amber-600 text-white" onClick={generateAndStart} disabled={generating}>
-                    {generating ? <Loader2 className="h-4 w-4 mr-2 animate-spin" aria-hidden /> : <Sparkles className="h-4 w-4 mr-2" aria-hidden />}
-                    {generating ? "Writing fresh questions…" : "Generate fresh set with AI"}
-                  </Button>
                 </CardContent>
               </Card>
             )}
